@@ -36,3 +36,5 @@
   - Salvarea unei referințe a imaginii în baza de date
 - [ ] Cloud deploy (**0.5 puncte**)
   - Deploy al aplicatiei (Node.JS + baza de date) pe orice serviciu cloud (e.g. Heroku, AWS, Azure, Vercel, etc.)
+
+#### Aplicația se va prezenta unuia dintre cei doi profesori în sesiune; ar fi indicat sa pregatiti in Postman request uri, sa aveți un database viewer prin care sa ne arătați cum se modifica datele in baza de date, și alte tools care sa demonstreze cat mai ușor și rapid corectitudinea cerințelor rezolvate.
