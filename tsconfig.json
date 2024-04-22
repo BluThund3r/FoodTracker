@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "ESNext", // or ES2015, ES2020
+    "allowSyntheticDefaultImports": true // Add this line
+  },
+  "ts-node": {
+    "esm": true
+  }
+}

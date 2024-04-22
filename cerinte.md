@@ -3,7 +3,7 @@
 - [ ] Implementarea operațiilor CRUD (create, read, update, delete) pentru cel puțin 3
       entități care au o relatie intre ele (e.g. entitatea User și entitatea Post au o relatie de
       one-to-many, adica un user are mai multe postari)
-- [ ] Salvarea datelor intr-o baza de date (+ folosire de ORM)
+- [x] Salvarea datelor intr-o baza de date (+ folosire de ORM)
 - [ ] Rute private si rute publice
   - Pentru rute private este nevoie de autentificare, cel mai simplu ar fi cu JWT
   - Implicit trebuie o metoda de signup și signin pentru a face rost de un JWT

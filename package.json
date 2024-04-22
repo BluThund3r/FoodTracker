@@ -2,11 +2,12 @@
   "name": "foodtracker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "startDev": "nodemon --exec ts-node src/index.ts"
+    "devStart": "nodemon --exec ts-node src/index.ts",
+    "db": "docker-compose up -d"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "express-validator": "^7.0.1"
+    "express-validator": "^7.0.1",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
