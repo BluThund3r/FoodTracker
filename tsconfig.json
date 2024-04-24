@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "module": "ESNext",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "target": "ESNext",
   },
   "ts-node": {
     "esm": true

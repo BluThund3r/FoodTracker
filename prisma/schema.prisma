@@ -25,13 +25,13 @@ model User {
 }
 
 model UserDetails {
-  id            String        @id @default(uuid())
-  user          User          @relation(fields: [userId], references: [id])
-  userId        String        @unique
-  weight        Float
-  age           Int
-  height        Int
-  activityLevel ActivityLevel
+  id            String         @id @default(uuid())
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String         @unique
+  weight        Float?
+  age           Int?
+  height        Int?
+  activityLevel ActivityLevel?
 }
 
 enum ActivityLevel {
@@ -55,7 +55,6 @@ model Food {
   updatedAt       DateTime    @updatedAt
   servingUnitId   String
   meals           Meal[]
-  mealId          String?
 }
 
 model ServingUnit {
