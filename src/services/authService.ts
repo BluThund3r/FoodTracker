@@ -1,6 +1,12 @@
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
-import { generateToken } from "./jwtService";
+import { generateToken } from "./jwtService.js";
+import { PasswordsDoNotMatch } from "../exceptions/PasswordsDoNotMatch.js";
+import { UserNotFound } from "../exceptions/UserNotFound.js";
+import { PasswordIncorrect } from "../exceptions/PasswordIncorrect.js";
+import { UsernameNotValid } from "../exceptions/UsernameNotValid.js";
+import { UserAlreadyExists } from "../exceptions/UserAlreadyExists.js";
+import { PasswordNotValid } from "../exceptions/PasswordNotValid.js";
 
 const prisma = new PrismaClient();
 const saltRounds = 10;

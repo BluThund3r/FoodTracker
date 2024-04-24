@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "NodeNext",
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "target": "ESNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "sourceMap": true,
+    "outDir": "build"
   },
-  "ts-node": {
-    "esm": true
-  }
+  "include": ["src/**/*"]
 }

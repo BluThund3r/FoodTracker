@@ -1,4 +1,4 @@
-class PasswordsDoNotMatch extends Error {
+export class PasswordsDoNotMatch extends Error {
   constructor() {
     super("Passwords do not match");
     this.name = "PasswordsDoNotMatch";

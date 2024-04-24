@@ -1,7 +1,4 @@
 import express from "express";
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post('/register')
-
-
-export default router;
+export default authRouter;
