@@ -1,15 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
-import { logger } from "./middlewares/basicMiddlewares";
+import { errorHandler, logger } from "./middlewares/basicMiddlewares";
 import authRouter from "./routes/authRouter";
 
 dotenv.config();
 const app = express();
 
-// Add middleware to the application
-app.use(logger);
+// Add middlewares to the application
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(logger);
 
 // Add routers to the application
 app.use("/auth", authRouter);
@@ -18,6 +18,9 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(8080, () => {
-  console.log("Server is running on port 8080");
+// Add the error handler middleware
+app.use(errorHandler);
+
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 });

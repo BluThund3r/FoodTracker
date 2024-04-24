@@ -1,6 +1,9 @@
+import { StatusCodes } from "http-status-codes";
+
 export class UserAlreadyExists extends Error {
-    constructor() {
-        super('User already exists');
-        this.name = 'UserAlreadyExists';
-    }
+  status = StatusCodes.CONFLICT;
+  constructor() {
+    super("User already exists");
+    this.name = "UserAlreadyExists";
+  }
 }

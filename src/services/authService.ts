@@ -1,21 +1,25 @@
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
-import { generateToken } from "./jwtService.js";
-import { PasswordsDoNotMatch } from "../exceptions/PasswordsDoNotMatch.js";
-import { UserNotFound } from "../exceptions/UserNotFound.js";
-import { PasswordIncorrect } from "../exceptions/PasswordIncorrect.js";
-import { UsernameNotValid } from "../exceptions/UsernameNotValid.js";
-import { UserAlreadyExists } from "../exceptions/UserAlreadyExists.js";
-import { PasswordNotValid } from "../exceptions/PasswordNotValid.js";
+import { generateToken } from "./jwtService";
+import { PasswordsDoNotMatch } from "../exceptions/PasswordsDoNotMatch";
+import { UserNotFound } from "../exceptions/UserNotFound";
+import { PasswordIncorrect } from "../exceptions/PasswordIncorrect";
+import { UsernameNotValid } from "../exceptions/UsernameNotValid";
+import { UserAlreadyExists } from "../exceptions/UserAlreadyExists";
+import { PasswordNotValid } from "../exceptions/PasswordNotValid";
 
 const prisma = new PrismaClient();
 const saltRounds = 10;
 
-export async function registerUser(
-  username: string,
-  password: string,
-  confirmPassword: string
-) {
+export async function registerUser({
+  username,
+  password,
+  confirmPassword,
+}: {
+  username: string;
+  password: string;
+  confirmPassword: string;
+}) {
   if (password !== confirmPassword) {
     throw new PasswordsDoNotMatch();
   }
@@ -35,7 +39,13 @@ export async function registerUser(
   return user;
 }
 
-export async function loginUser(username: string, password: string) {
+export async function loginUser({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) {
   const user = await authenticateUser(username, password);
   const token = generateToken({
     username: user.username,

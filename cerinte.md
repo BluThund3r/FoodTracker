@@ -7,7 +7,7 @@
 - [ ] Rute private si rute publice
   - Pentru rute private este nevoie de autentificare, cel mai simplu ar fi cu JWT
   - Implicit trebuie o metoda de signup și signin pentru a face rost de un JWT
-- [ ] Error handling
+- [x] Error handling
 - [ ] Middleware care valideaza payload/parametrii request-ului
 - [ ] Explicați unul sau mai multe flow-uri prin care un potential client (e.g. o aplicatie web)
       ar trece pentru a folosi aplicația
