@@ -4,11 +4,11 @@
       entități care au o relatie intre ele (e.g. entitatea User și entitatea Post au o relatie de
       one-to-many, adica un user are mai multe postari)
 - [x] Salvarea datelor intr-o baza de date (+ folosire de ORM)
-- [ ] Rute private si rute publice
+- [x] Rute private si rute publice
   - Pentru rute private este nevoie de autentificare, cel mai simplu ar fi cu JWT
   - Implicit trebuie o metoda de signup și signin pentru a face rost de un JWT
 - [x] Error handling
-- [ ] Middleware care valideaza payload/parametrii request-ului
+- [x] Middleware care valideaza payload/parametrii request-ului
 - [ ] Explicați unul sau mai multe flow-uri prin care un potential client (e.g. o aplicatie web)
       ar trece pentru a folosi aplicația
   - E.g: Aplicatie de retete: Userul se inregistreaza în aplicație, după care poate

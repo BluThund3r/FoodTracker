@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import { errorHandler, logger } from "./middlewares/basicMiddlewares";
+import { errorHandler, logger } from "./middlewares/usefulMiddlewares";
 import authRouter from "./routes/authRouter";
+import unitRouter from "./routes/unitRouter";
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(logger);
 
 // Add routers to the application
 app.use("/auth", authRouter);
+app.use("/units", unitRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
