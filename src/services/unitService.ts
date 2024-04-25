@@ -100,8 +100,10 @@ export async function getConversionByAbbrevs(
 ) {
   const fromUnit = await getUnitByAbbrev(fromAbbrev);
   const toUnit = await getUnitByAbbrev(toAbbrev);
-  if (!fromUnit || !toUnit) throw new ConversionNotFound();
-  return await getConversion(fromUnit.id, toUnit.id);
+  if (!fromUnit || !toUnit) throw new UnitNotFound();
+  const conversion = await getConversion(fromUnit.id, toUnit.id);
+  if (!conversion) throw new ConversionNotFound();
+  return conversion;
 }
 
 export async function updateConversion(
@@ -109,7 +111,8 @@ export async function updateConversion(
   toUnitId: string,
   ratio: number
 ) {
-  return await prisma.unitConversion.updateMany({
+  // Update fromUnitId -> toUnitId with ratio
+  const conversion1 = await prisma.unitConversion.updateMany({
     where: {
       AND: [{ fromUnitId: fromUnitId }, { toUnitId: toUnitId }],
     },
@@ -117,14 +120,35 @@ export async function updateConversion(
       ratio: ratio,
     },
   });
+
+  // Update toUnitId -> fromUnitId with 1/ratio
+
+  const conversion2 = await prisma.unitConversion.updateMany({
+    where: {
+      AND: [{ fromUnitId: toUnitId }, { toUnitId: fromUnitId }],
+    },
+    data: {
+      ratio: 1 / ratio,
+    },
+  });
+
+  return [conversion1, conversion2];
 }
 
 export async function deleteConversion(fromUnitId: string, toUnitId: string) {
-  return await prisma.unitConversion.deleteMany({
+  const conversion1 = await prisma.unitConversion.deleteMany({
     where: {
       AND: [{ fromUnitId: fromUnitId }, { toUnitId: toUnitId }],
     },
   });
+
+  const conversion2 = await prisma.unitConversion.deleteMany({
+    where: {
+      AND: [{ fromUnitId: toUnitId }, { toUnitId: fromUnitId }],
+    },
+  });
+
+  return [conversion1, conversion2];
 }
 
 export async function convert(

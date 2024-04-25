@@ -18,6 +18,7 @@ import {
 } from "../services/unitService";
 import { ServingUnit } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
+import { UnitNotFound } from "../exceptions/UnitNotFound";
 
 const unitRouter = express.Router();
 
@@ -69,13 +70,15 @@ unitRouter.get("/convert", validateUnitConvert, (req, res, next) => {
 
 unitRouter
   .route("/:abbr")
-  .get((req, res, next) => {
+  .get(async (req, res, next) => {
     const { abbr } = req.params;
-    getUnitByAbbrev(abbr)
-      .then((unit) => {
-        res.status(StatusCodes.OK).json(unit);
-      })
-      .catch(next);
+    try {
+      const unit = await getUnitByAbbrev(abbr);
+      if (!unit) throw new UnitNotFound();
+      res.status(StatusCodes.OK).json(unit);
+    } catch (e) {
+      next(e);
+    }
   })
   .put(isLoggedIn, isAdmin, validateUnitCreate, async (req, res, next) => {
     const { name, abbreviation } = req.body;
@@ -90,7 +93,8 @@ unitRouter
     }
     unitUpdate.name = name;
     unitUpdate.abbreviation = abbreviation;
-    updateUnit(abbr, unitUpdate)
+
+    updateUnit(unitUpdate.id, unitUpdate)
       .then((unit) => {
         res.status(StatusCodes.OK).json(unit);
       })
@@ -113,22 +117,22 @@ unitRouter
   });
 
 unitRouter
-  .route("/unitConversion/:abbr1/:abbr2")
+  .route("/unitConversion/:fromAbbr/:toAbbr")
   .get((req, res, next) => {
-    const { abbr1, abbr2 } = req.params;
-    getConversionByAbbrevs(abbr1, abbr2)
+    const { fromAbbr, toAbbr } = req.params;
+    getConversionByAbbrevs(fromAbbr, toAbbr)
       .then((conversion) => {
         res.status(StatusCodes.OK).json(conversion);
       })
       .catch(next);
   })
   .put(isLoggedIn, isAdmin, validateUnitConvert, async (req, res, next) => {
-    const { abbr1, abbr2 } = req.params;
+    const { fromAbbr, toAbbr } = req.params;
     const { ratio } = req.body;
 
     let conversionUpdate;
     try {
-      conversionUpdate = await getConversionByAbbrevs(abbr1, abbr2);
+      conversionUpdate = await getConversionByAbbrevs(fromAbbr, toAbbr);
     } catch (e) {
       next(e);
     }
@@ -144,9 +148,9 @@ unitRouter
       .catch(next);
   })
   .delete(isLoggedIn, isAdmin, async (req, res, next) => {
-    const { abbr1, abbr2 } = req.params;
+    const { fromAbbr, toAbbr } = req.params;
     try {
-      const conversionDelete = await getConversionByAbbrevs(abbr1, abbr2);
+      const conversionDelete = await getConversionByAbbrevs(fromAbbr, toAbbr);
       return res
         .status(StatusCodes.OK)
         .json(

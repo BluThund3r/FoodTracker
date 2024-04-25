@@ -16,10 +16,6 @@ app.use(logger);
 app.use("/auth", authRouter);
 app.use("/units", unitRouter);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 // Add the error handler middleware
 app.use(errorHandler);
 
