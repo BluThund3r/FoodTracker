@@ -4,6 +4,8 @@ import { errorHandler, logger } from "./middlewares/usefulMiddlewares";
 import authRouter from "./routes/authRouter";
 import unitRouter from "./routes/unitRouter";
 import foodRouter from "./routes/foodRouter";
+import userRouter from "./routes/userRouter";
+import mealRouter from "./routes/mealRouter";
 
 dotenv.config();
 const app = express();
@@ -17,6 +19,8 @@ app.use(logger);
 app.use("/auth", authRouter);
 app.use("/units", unitRouter);
 app.use("/food", foodRouter);
+app.use("/users", userRouter);
+app.use("/meals", mealRouter);
 
 // Add the error handler middleware
 app.use(errorHandler);

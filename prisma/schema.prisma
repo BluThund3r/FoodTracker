@@ -31,7 +31,14 @@ model UserDetails {
   weight        Float?
   age           Int?
   height        Int?
+  plan          Plan?
+  gender        Gender?
   activityLevel ActivityLevel?
+}
+
+enum Gender {
+  M
+  F
 }
 
 enum ActivityLevel {
@@ -39,6 +46,13 @@ enum ActivityLevel {
   LIGHTLY_ACTIVE // light exercise or sports 1-3 days a week (light walking, light jogging, etc.)
   MODERATELY_ACTIVE // moderate exercise or sports 3-5 days a week (jogging, swimming, etc.)
   VERY_ACTIVE // hard exercise or sports 6-7 days a week (running, swimming, etc.)
+  SUPER_ACTIVE // very hard exercise or sports, physical job, or training twice a day
+}
+
+enum Plan {
+  MAINTENANCE
+  WEIGHT_LOSS
+  WEIGHT_GAIN
 }
 
 model Food {

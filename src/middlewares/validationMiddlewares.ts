@@ -113,3 +113,7 @@ export function validateQueryFood(req, res, next) {
   }
   next();
 }
+
+export function validateUserDetails(req, res, next) {
+  // TODO: Implement this function
+}
