@@ -57,34 +57,48 @@ export async function deleteFood(id: string) {
 }
 
 export async function getFood(
-  sortBy: SortCriteria = "calories",
-  sortOrder: SortOrder = "desc",
-  limit: number = 10,
-  offset: number = 0,
-  filters: object = {}
+  params: {
+    sortBy?: SortCriteria;
+    sortOrder?: SortOrder;
+    limit?: number;
+    offset?: number;
+    filters?: object;
+  } = {
+    sortBy: "calories",
+    sortOrder: "desc",
+    limit: 10,
+    offset: 0,
+    filters: {},
+  }
 ) {
   // in case the function is called with arguments as undefined
-  if (sortBy === undefined) {
-    sortBy = "calories";
+  if (params.sortBy === undefined) {
+    params.sortBy = "calories";
   }
-  if (sortOrder === undefined) {
-    sortOrder = "desc";
+  if (params.sortOrder === undefined) {
+    params.sortOrder = "desc";
   }
-  if (limit === undefined) {
-    limit = 10;
+  if (params.limit === undefined) {
+    params.limit = 10;
   }
-  if (offset === undefined) {
-    offset = 0;
+  if (params.offset === undefined) {
+    params.offset = 0;
   }
-  if (filters === undefined || filters === null) {
-    filters = {};
+  if (params.filters === undefined || params.filters === null) {
+    params.filters = {};
   }
   return await prisma.food.findMany({
-    where: filters,
+    where: params.filters,
     orderBy: {
-      [sortBy]: sortOrder,
+      [params.sortBy]: params.sortOrder,
     },
-    take: limit,
-    skip: offset,
+    take: params.limit,
+    skip: params.offset,
+  });
+}
+
+export async function getFoodByName(name: string) {
+  return await getFood({
+    filters: { name: { contains: name, mode: "insensitive" } },
   });
 }

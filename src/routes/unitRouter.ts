@@ -66,54 +66,6 @@ unitRouter.get("/convert", validateUnitConvert, (req, res, next) => {
 });
 
 unitRouter
-  .route("/:abbr")
-  .get(async (req, res, next) => {
-    const { abbr } = req.params;
-    try {
-      const unit = await getUnitByAbbrev(abbr);
-      if (!unit) throw new UnitNotFound();
-      res.status(StatusCodes.OK).json(unit);
-    } catch (e) {
-      next(e);
-    }
-  })
-  .put(isLoggedIn, isAdmin, validateUnitCreate, async (req, res, next) => {
-    const { name, abbreviation } = req.body;
-    const { abbr } = req.params;
-
-    const unitUpdate: ServingUnit = await getUnitByAbbrev(abbr);
-    if (!unitUpdate) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        message: "Unit not found",
-      });
-      return;
-    }
-    unitUpdate.name = name;
-    unitUpdate.abbreviation = abbreviation;
-
-    updateUnit(unitUpdate.id, unitUpdate)
-      .then((unit) => {
-        res.status(StatusCodes.OK).json(unit);
-      })
-      .catch(next);
-  })
-  .delete(isLoggedIn, isAdmin, async (req, res, next) => {
-    const { abbr } = req.params;
-    const unitDelete = await getUnitByAbbrev(abbr);
-    if (!unitDelete) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        message: "Unit not found",
-      });
-      return;
-    }
-    try {
-      return res.status(StatusCodes.OK).json(deleteUnit(unitDelete.id));
-    } catch (e) {
-      next(e);
-    }
-  });
-
-unitRouter
   .route("/unitConversion/:fromAbbr/:toAbbr")
   .get((req, res, next) => {
     const { fromAbbr, toAbbr } = req.params;
@@ -156,6 +108,54 @@ unitRouter
             conversionDelete.toUnitId
           )
         );
+    } catch (e) {
+      next(e);
+    }
+  });
+
+unitRouter
+  .route("/:abbr")
+  .get(async (req, res, next) => {
+    const { abbr } = req.params;
+    try {
+      const unit = await getUnitByAbbrev(abbr);
+      if (!unit) throw new UnitNotFound();
+      res.status(StatusCodes.OK).json(unit);
+    } catch (e) {
+      next(e);
+    }
+  })
+  .put(isLoggedIn, isAdmin, validateUnitCreate, async (req, res, next) => {
+    const { name, abbreviation } = req.body;
+    const { abbr } = req.params;
+
+    const unitUpdate: ServingUnit = await getUnitByAbbrev(abbr);
+    if (!unitUpdate) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: "Unit not found",
+      });
+      return;
+    }
+    unitUpdate.name = name;
+    unitUpdate.abbreviation = abbreviation;
+
+    updateUnit(unitUpdate.id, unitUpdate)
+      .then((unit) => {
+        res.status(StatusCodes.OK).json(unit);
+      })
+      .catch(next);
+  })
+  .delete(isLoggedIn, isAdmin, async (req, res, next) => {
+    const { abbr } = req.params;
+    const unitDelete = await getUnitByAbbrev(abbr);
+    if (!unitDelete) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: "Unit not found",
+      });
+      return;
+    }
+    try {
+      return res.status(StatusCodes.OK).json(deleteUnit(unitDelete.id));
     } catch (e) {
       next(e);
     }

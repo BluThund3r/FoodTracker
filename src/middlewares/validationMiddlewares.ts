@@ -1,10 +1,20 @@
 import { StatusCodes } from "http-status-codes";
 import { isSortCriteria, isSortOrder } from "../types/foodTypes";
 
-function validateNumber(number) {
+// Useful functions
+function validateStrictPositiveNumber(number) {
   return !isNaN(number) && number > 0;
 }
 
+function validatePositiveNumber(number) {
+  return !isNaN(number) && number >= 0;
+}
+
+function undefOrNull(value) {
+  return value === undefined || value === null;
+}
+
+// Unit validations
 export function validateUnitConvert(req, res, next) {
   const { fromUnitAbbrev, toUnitAbbrev } = req.body;
   let amountOrRatio = req.body.amount || req.body.ratio;
@@ -13,7 +23,7 @@ export function validateUnitConvert(req, res, next) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Please provide both units",
     });
-  } else if (isNaN(amountOrRatio) || amountOrRatio <= 0) {
+  } else if (!validateStrictPositiveNumber(amountOrRatio)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Please provide a valid ratio",
     });
@@ -37,11 +47,12 @@ export function validateUnitCreate(req, res, next) {
   next();
 }
 
+// Food validations
 export function validateFood(req, res, next) {
   const {
     name,
     baseServingSize,
-    baseServingUnitId,
+    baseServingUnitAbbrev,
     calories,
     protein,
     carbs,
@@ -49,14 +60,14 @@ export function validateFood(req, res, next) {
     sugar,
   } = req.body;
   if (
-    !name ||
-    !baseServingSize ||
-    !baseServingUnitId ||
-    !calories ||
-    !protein ||
-    !carbs ||
-    !fat ||
-    !sugar
+    undefOrNull(name) ||
+    undefOrNull(baseServingSize) ||
+    undefOrNull(baseServingUnitAbbrev) ||
+    undefOrNull(calories) ||
+    undefOrNull(protein) ||
+    undefOrNull(carbs) ||
+    undefOrNull(fat) ||
+    undefOrNull(sugar)
   ) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Please provide all fields",
@@ -64,7 +75,7 @@ export function validateFood(req, res, next) {
   }
 
   const numbers = [baseServingSize, calories, protein, carbs, fat, sugar];
-  if (numbers.some((number) => !validateNumber(number))) {
+  if (numbers.some((number) => !validatePositiveNumber(number))) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: "Please provide valid numbers" });
@@ -75,27 +86,27 @@ export function validateFood(req, res, next) {
 
 export function validateQueryFood(req, res, next) {
   const { sortBy, sortOrder, limit, offset, filters } = req.body;
-  if (sortBy && !isSortCriteria(sortBy)) {
+  if (!undefOrNull(sortBy) && !isSortCriteria(sortBy)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid sortBy criteria",
     });
   }
-  if (sortOrder && !isSortOrder(sortOrder)) {
+  if (!undefOrNull(sortOrder) && !isSortOrder(sortOrder)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid sortOrder criteria",
     });
   }
-  if (limit && !validateNumber(limit)) {
+  if (!undefOrNull(limit) && !validatePositiveNumber(limit)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid limit",
     });
   }
-  if (offset && !validateNumber(offset)) {
+  if (!undefOrNull(offset) && !validatePositiveNumber(offset)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid offset",
     });
   }
-  if (filters && typeof filters !== "object") {
+  if (!undefOrNull(filters) && typeof filters !== "object") {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid filters",
     });

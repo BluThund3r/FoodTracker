@@ -55,6 +55,8 @@ model Food {
   updatedAt         DateTime    @updatedAt
   baseServingUnitId String
   meals             Meal[]
+
+  @@unique([name, baseServingUnitId])
 }
 
 model ServingUnit {
