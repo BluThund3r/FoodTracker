@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { isSortCriteria, isSortOrder } from "../types/foodTypes";
+import { isActivityLevel, isGender, isPlan } from "../services/userService";
 
 // Useful functions
 function validateStrictPositiveNumber(number) {
@@ -115,5 +116,44 @@ export function validateQueryFood(req, res, next) {
 }
 
 export function validateUserDetails(req, res, next) {
-  // TODO: Implement this function
+  const { weight, height, age, plan, gender, activityLevel } = req.body;
+  if (
+    undefOrNull(weight) ||
+    undefOrNull(height) ||
+    undefOrNull(age) ||
+    undefOrNull(plan) ||
+    undefOrNull(gender) ||
+    undefOrNull(activityLevel)
+  ) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide all fields",
+    });
+  }
+
+  const numbers = [weight, height, age];
+  if (numbers.some((number) => !validateStrictPositiveNumber(number))) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Please provide valid numbers" });
+  }
+
+  if (!isPlan(plan)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid plan",
+    });
+  }
+
+  if (!isGender(gender)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid gender",
+    });
+  }
+
+  if (!isActivityLevel(activityLevel)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid activity level",
+    });
+  }
+
+  next();
 }

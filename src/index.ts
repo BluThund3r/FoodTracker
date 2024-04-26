@@ -6,6 +6,7 @@ import unitRouter from "./routes/unitRouter";
 import foodRouter from "./routes/foodRouter";
 import userRouter from "./routes/userRouter";
 import mealRouter from "./routes/mealRouter";
+import nutritionRouter from "./routes/nutritionRouter";
 
 dotenv.config();
 const app = express();
@@ -21,6 +22,7 @@ app.use("/units", unitRouter);
 app.use("/food", foodRouter);
 app.use("/users", userRouter);
 app.use("/meals", mealRouter);
+app.use("/nutrition", nutritionRouter);
 
 // Add the error handler middleware
 app.use(errorHandler);

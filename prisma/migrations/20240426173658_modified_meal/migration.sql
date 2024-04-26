@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Meal" ALTER COLUMN "mealDate" DROP DEFAULT,
+ALTER COLUMN "mealDate" SET DATA TYPE TEXT;

@@ -1,6 +1,6 @@
 ## Obligatoriu pentru nota 5
 
-- [ ] Implementarea operațiilor CRUD (create, read, update, delete) pentru cel puțin 3
+- [x] Implementarea operațiilor CRUD (create, read, update, delete) pentru cel puțin 3
       entități care au o relatie intre ele (e.g. entitatea User și entitatea Post au o relatie de
       one-to-many, adica un user are mai multe postari)
 - [x] Salvarea datelor intr-o baza de date (+ folosire de ORM)

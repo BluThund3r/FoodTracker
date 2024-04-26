@@ -68,7 +68,7 @@ model Food {
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
   baseServingUnitId String
-  meals             Meal[]
+  MealItem          MealItem[]
 
   @@unique([name, baseServingUnitId])
 }
@@ -82,6 +82,7 @@ model ServingUnit {
   food         Food[]
   fromUnit     UnitConversion[] @relation("fromUnit")
   toUnit       UnitConversion[] @relation("toUnit")
+  mealItems     MealItem[]
 }
 
 model UnitConversion {
@@ -96,16 +97,27 @@ model UnitConversion {
 }
 
 model Meal {
-  id        String              @id @default(uuid())
-  user      User                @relation(fields: [userId], references: [id])
+  id        String     @id @default(uuid())
+  user      User       @relation(fields: [userId], references: [id])
   userId    String
   name      MealType
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
-  food      Food[]
-  mealDate  Unsupported("date") @default(dbgenerated("now()"))
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  mealDate  String
+  items     MealItem[]
 
   @@unique([userId, name, mealDate])
+}
+
+model MealItem {
+  id            String      @id @default(uuid())
+  meal          Meal        @relation(fields: [mealId], references: [id])
+  mealId        String
+  food          Food        @relation(fields: [foodId], references: [id])
+  foodId        String
+  amount        Float
+  unit          ServingUnit @relation(fields: [servingUnitId], references: [id])
+  servingUnitId String
 }
 
 enum MealType {
