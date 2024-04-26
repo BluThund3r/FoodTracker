@@ -16,7 +16,7 @@ export async function getUnitById(id: string) {
   });
 }
 
-export async function createUnit(unit: ServingUnit) {
+export async function createUnit(unit: Partial<ServingUnit>) {
   return await prisma.servingUnit.create({
     data: {
       name: unit.name,
@@ -25,7 +25,7 @@ export async function createUnit(unit: ServingUnit) {
   });
 }
 
-export async function updateUnit(id: string, unit: ServingUnit) {
+export async function updateUnit(id: string, unit: Partial<ServingUnit>) {
   return await prisma.servingUnit.update({
     where: {
       id: id,

@@ -42,19 +42,19 @@ enum ActivityLevel {
 }
 
 model Food {
-  id              String      @id @default(uuid())
-  name            String
-  baseServingUnit ServingUnit @relation(fields: [servingUnitId], references: [id])
-  baseServingSize Float
-  calories        Float
-  protein         Float
-  carbohydrates   Float
-  fat             Float
-  sugars          Float
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  servingUnitId   String
-  meals           Meal[]
+  id                String      @id @default(uuid())
+  name              String
+  baseServingUnit   ServingUnit @relation(fields: [baseServingUnitId], references: [id])
+  baseServingSize   Float
+  calories          Float
+  protein           Float
+  carbs             Float
+  fat               Float
+  sugar             Float
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  baseServingUnitId String
+  meals             Meal[]
 }
 
 model ServingUnit {

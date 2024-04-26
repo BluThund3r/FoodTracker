@@ -18,13 +18,13 @@
 
 - [ ] Cel putin 4 unit tests (**1 punct**) 🟢
 - [ ] Operatii CRUD mai avansate, de ales dintre (**maxim 2 puncte**):
-  - [ ] Filtrare + Sortare (**1 punct**) 🟢
-  - [ ] Paginare (**1 punct**) 🟢
+  - [x] Filtrare + Sortare (**1 punct**) 🟢
+  - [x] Paginare (**1 punct**) 🟢
   - [ ] Tranzactie unde se insereaza / updateaza mai multe entitati interdependente (**1 punct**)
-- [ ] Implementarea si folosirea unor custom middlewares (**0.5 puncte per middleware, maxim 1 punct**)
+- [x] Implementarea si folosirea unor custom middlewares (**0.5 puncte per middleware, maxim 1 punct**)
   - Implementarea și folosirea implica sa faceți voi unul de la 0, nu sa folositi middlewares gata făcute din alte librării
-- [ ] Autentificare avansata (**1 punct**) la alegere:
-  - [ ] Role based authentication 🟢
+- [x] Autentificare avansata (**1 punct**) la alegere:
+  - [x] Role based authentication 🟢
   - [ ] Integrare cu OAuth
 - [ ] Documentatie (**1 punct**) 🟢
   - [ ] README complet, descrierea aplicației, pașii de setup explicarea env variables

@@ -29,10 +29,7 @@ unitRouter.post(
   validateUnitCreate,
   (req, res, next) => {
     const { name, abbreviation } = req.body;
-    const unitCreate: ServingUnit = {
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const unitCreate = {
       name,
       abbreviation,
     };
