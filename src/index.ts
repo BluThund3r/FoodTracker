@@ -1,6 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import { errorHandler, logger } from "./middlewares/usefulMiddlewares";
+import {
+  errorHandler,
+  isLoggedIn,
+  logger,
+} from "./middlewares/usefulMiddlewares";
 import authRouter from "./routes/authRouter";
 import unitRouter from "./routes/unitRouter";
 import foodRouter from "./routes/foodRouter";
@@ -25,6 +29,11 @@ app.use("/users", userRouter);
 app.use("/meals", mealRouter);
 app.use("/nutrition", nutritionRouter);
 app.use("/exercise", exerciseRouter);
+
+// Entpoint to test who is logged in the application
+app.get("/test", isLoggedIn, (req, res) => {
+  res.json({ ...(req as any).user });
+});
 
 // Add the error handler middleware
 app.use(errorHandler);

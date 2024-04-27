@@ -7,7 +7,9 @@ import { getUserByUsername } from "./userService";
 const prisma = new PrismaClient();
 
 export async function getAllExercises() {
-  return await prisma.exercise.findMany();
+  return await prisma.exercise.findMany({
+    orderBy: [{ caloriesPerMinute: "desc" }, { name: "asc" }],
+  });
 }
 
 export async function getExerciseById(id: string) {
@@ -54,6 +56,8 @@ export async function searchExercises(
   limit: number = 5,
   offset: number = 0
 ) {
+  if (isNaN(limit)) limit = 5;
+  if (isNaN(offset)) offset = 0;
   return await prisma.exercise.findMany({
     where: {
       name: {

@@ -52,10 +52,10 @@ mealRouter.post(
   validateAddFood,
   async (req, res, next) => {
     try {
-      const { mealId, foodId, amount, unitId } = req.body;
+      const { mealId, foodId, amount, unitAbbrev } = req.body;
       res
         .status(StatusCodes.OK)
-        .json(await addFoodToMeal(mealId, foodId, amount, unitId));
+        .json(await addFoodToMeal(mealId, foodId, amount, unitAbbrev));
     } catch (e) {
       next(e);
     }

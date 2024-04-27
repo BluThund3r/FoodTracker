@@ -167,6 +167,7 @@ export async function getMealsForDay(username: string, date: string) {
     },
   });
   if (!user) throw new UserNotFound();
+
   const rawResult = await prisma.meal.findMany({
     where: {
       userId: user.id,

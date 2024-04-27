@@ -145,8 +145,9 @@ export async function calcNutritionForMeal(meal) {
 
 export async function calcNutritionForItem(item) {
   const ratio =
-    (await convert(item.unit.id, item.food.baseServingUnit.id, item.amount)) /
+    (await convert(item.unit.id, item.food.baseServingUnitId, item.amount)) /
     item.food.baseServingSize;
+
   return {
     calories: item.food.calories * ratio,
     protein: item.food.protein * ratio,

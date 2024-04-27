@@ -20,6 +20,7 @@ import {
   validateDateBody,
   validateDateQuery,
   validateExerciseNameBody,
+  validateExerciseNameQuery,
   validateExerciseSearch,
 } from "../middlewares/validationMiddlewares";
 const exerciseRouter = express.Router();
@@ -93,7 +94,7 @@ exerciseRouter.patch(
     try {
       res
         .status(StatusCodes.OK)
-        .json(await updateUserExercise(username, name, duration, date));
+        .json(await updateUserExercise(username, name, date, duration));
     } catch (error) {
       next(error);
     }
@@ -120,12 +121,12 @@ exerciseRouter.delete(
 
 exerciseRouter.get(
   "/userExerciseForDate",
-  validateExerciseNameBody,
-  validateDateBody,
+  validateExerciseNameQuery,
+  validateDateQuery,
   isLoggedIn,
   async (req, res, next) => {
     const username = (req as any).user.username;
-    const { date, name } = req.body;
+    const { date, name } = req.query as any;
     try {
       res
         .status(StatusCodes.OK)

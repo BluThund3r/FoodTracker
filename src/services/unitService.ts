@@ -156,6 +156,7 @@ export async function convert(
   toUnitId: string,
   amount: number
 ) {
+  if (fromUnitId === toUnitId) return amount;
   const conversion = await getConversion(fromUnitId, toUnitId);
   return amount * conversion?.ratio;
 }

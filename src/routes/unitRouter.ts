@@ -56,14 +56,18 @@ unitRouter.post(
   }
 );
 
-unitRouter.get("/convert", validateUnitConvert, (req, res, next) => {
-  const { fromUnitAbbrev, toUnitAbbrev, amount } = req.body;
-  convertByAbbrevs(fromUnitAbbrev, toUnitAbbrev, amount)
-    .then((converted) => {
-      res.status(StatusCodes.OK).json(converted);
-    })
-    .catch(next);
-});
+unitRouter.get(
+  "/convert/:fromAbbrev/:toAbbrev/:amount",
+  validateUnitConvert,
+  (req, res, next) => { 
+    let { fromAbbrev, toAbbrev, amount } = (req as any).params;
+    convertByAbbrevs(fromAbbrev, toAbbrev, amount)
+      .then((converted) => {
+        res.status(StatusCodes.OK).json(converted);
+      })
+      .catch(next);
+  }
+);
 
 unitRouter
   .route("/unitConversion/:fromAbbr/:toAbbr")

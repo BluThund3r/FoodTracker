@@ -18,6 +18,7 @@ function undefOrNull(value) {
   return value === undefined || value === null;
 }
 
+// TODO: Restrict the date to be in the past with at most 1 year
 function isDateWithValidFormat(date) {
   const minimumYear = 2000;
   const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
@@ -33,10 +34,10 @@ function isDateWithValidFormat(date) {
 
 // Unit validations
 export function validateUnitConvert(req, res, next) {
-  const { fromUnitAbbrev, toUnitAbbrev } = req.body;
-  let amountOrRatio = req.body.amount || req.body.ratio;
+  const { fromAbbrev, toAbbrev } = req.params;
+  let amountOrRatio = req.params.amount || req.params.ratio;
   amountOrRatio = parseFloat(amountOrRatio);
-  if (!fromUnitAbbrev || !toUnitAbbrev) {
+  if (!fromAbbrev || !toAbbrev) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Please provide both units",
     });
@@ -44,13 +45,16 @@ export function validateUnitConvert(req, res, next) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Please provide a valid ratio",
     });
-  } else if (fromUnitAbbrev === toUnitAbbrev) {
+  } else if (
+    !req.originalUrl.includes("/convert/") &&
+    fromAbbrev === toAbbrev
+  ) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "From unit and to unit cannot be the same",
     });
   }
-  req.body.amount = amountOrRatio;
-  req.body.ratio = amountOrRatio;
+  req.params.amount = amountOrRatio;
+  req.params.ratio = amountOrRatio;
   next();
 }
 
@@ -223,8 +227,8 @@ export function validateMealCreate(req, res, next) {
 }
 
 export function validateAddFood(req, res, next) {
-  const { mealId, foodId, amount, unitId } = req.body;
-  if (!mealId || !foodId || undefOrNull(amount) || !unitId) {
+  const { mealId, foodId, amount, unitAbbrev } = req.body;
+  if (!mealId || !foodId || undefOrNull(amount) || !unitAbbrev) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Please provide all fields",
     });
@@ -259,7 +263,7 @@ export function validateUpdateMealItem(req, res, next) {
   }
   if (!unitAbbrev) {
     return res.status(StatusCodes.BAD_REQUEST).json({
-      message: "Invalid unit id",
+      message: "Invalid unit abbreviation",
     });
   }
 
@@ -293,14 +297,15 @@ export function validateExerciseSearch(req, res, next) {
       message: "Please provide a name",
     });
   }
+  console.log("Limit:", limit, "Offset:", offset);
 
-  if (!undefOrNull(limit) && !validatePositiveNumber(limit)) {
+  if (!isNaN(limit) && !validatePositiveNumber(limit)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid limit",
     });
   }
 
-  if (!undefOrNull(offset) && !validatePositiveNumber(offset)) {
+  if (!isNaN(offset) && !validatePositiveNumber(offset)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid offset",
     });
@@ -330,6 +335,17 @@ export function validateAddExercise(req, res, next) {
 
 export function validateExerciseNameBody(req, res, next) {
   const { name } = req.body;
+  if (!name) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide all fields",
+    });
+  }
+
+  next();
+}
+
+export function validateExerciseNameQuery(req, res, next) {
+  const { name } = req.query;
   if (!name) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Please provide all fields",
