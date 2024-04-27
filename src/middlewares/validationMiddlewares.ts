@@ -188,6 +188,20 @@ export function validateDateQuery(req, res, next) {
   }
 }
 
+export function validateDateBody(req, res, next) {
+  const date = req.body.date;
+  if (!date) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide a date",
+    });
+  }
+
+  if (isDateWithValidFormat(date)) {
+    // if not, an error is thrown
+    next();
+  }
+}
+
 export function validateMealCreate(req, res, next) {
   const { name, date } = req.body;
   if (!name || !date) {
@@ -246,6 +260,79 @@ export function validateUpdateMealItem(req, res, next) {
   if (!unitAbbrev) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid unit id",
+    });
+  }
+
+  next();
+}
+
+export function validateCreateExercise(req, res, next) {
+  const { name, caloriesPerMinute } = req.body;
+  if (!name || undefOrNull(caloriesPerMinute)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide all fields",
+    });
+  }
+
+  if (!validateStrictPositiveNumber(caloriesPerMinute)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid calories per minute",
+    });
+  }
+
+  next();
+}
+
+export function validateExerciseSearch(req, res, next) {
+  let { name, limit, offset } = req.query;
+  name = name as string;
+  limit = parseInt(limit as string);
+  offset = parseInt(offset as string);
+  if (!name) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide a name",
+    });
+  }
+
+  if (!undefOrNull(limit) && !validatePositiveNumber(limit)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid limit",
+    });
+  }
+
+  if (!undefOrNull(offset) && !validatePositiveNumber(offset)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid offset",
+    });
+  }
+
+  req.query.search = { name, limit, offset };
+
+  next();
+}
+
+export function validateAddExercise(req, res, next) {
+  const { name, duration } = req.body;
+  if (!name || undefOrNull(duration)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide all fields",
+    });
+  }
+
+  if (!validateStrictPositiveNumber(duration)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid duration",
+    });
+  }
+
+  next();
+}
+
+export function validateExerciseNameBody(req, res, next) {
+  const { name } = req.body;
+  if (!name) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide all fields",
     });
   }
 

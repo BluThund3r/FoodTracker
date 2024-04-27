@@ -22,7 +22,7 @@ export async function createExercise(data: Partial<Exercise>) {
   return await prisma.exercise.create({
     data: {
       name: data.name,
-      description: data.description,
+      description: data.description || "",
       caloriesPerMinute: data.caloriesPerMinute,
     },
   });
@@ -35,7 +35,7 @@ export async function updateExercise(id: string, data: Partial<Exercise>) {
     },
     data: {
       name: data.name,
-      description: data.description,
+      description: data.description || "",
       caloriesPerMinute: data.caloriesPerMinute,
     },
   });
@@ -63,6 +63,7 @@ export async function searchExercises(
     },
     take: limit,
     skip: offset,
+    orderBy: [{ caloriesPerMinute: "desc" }, { name: "asc" }],
   });
 }
 
@@ -102,6 +103,46 @@ export async function addExerciseToUser(
       },
       duration,
       date,
+    },
+  });
+}
+
+export async function removeExerciseFromUser(
+  username: string,
+  exerciseName: string,
+  date: string
+) {
+  const userExercise = await getUserExerciseByDetails(
+    username,
+    exerciseName,
+    date
+  );
+
+  return await prisma.userExercise.delete({
+    where: {
+      id: userExercise.id,
+    },
+  });
+}
+
+export async function updateUserExercise(
+  username: string,
+  exerciseName: string,
+  date: string,
+  newDuration: number
+) {
+  const userExercise = await getUserExerciseByDetails(
+    username,
+    exerciseName,
+    date
+  );
+
+  return await prisma.userExercise.update({
+    where: {
+      id: userExercise.id,
+    },
+    data: {
+      duration: newDuration,
     },
   });
 }
@@ -156,46 +197,6 @@ export async function getUserExerciseByDetails(
 
   if (!userExercise) throw new UserExerciseNotFond();
   return transformUserExercise(userExercise);
-}
-
-export async function removeExerciseFromUser(
-  username: string,
-  exerciseName: string,
-  date: string
-) {
-  const userExercise = await getUserExerciseByDetails(
-    username,
-    exerciseName,
-    date
-  );
-
-  return await prisma.userExercise.delete({
-    where: {
-      id: userExercise.id,
-    },
-  });
-}
-
-export async function updateUserExercise(
-  username: string,
-  exerciseName: string,
-  date: string,
-  newDuration: number
-) {
-  const userExercise = await getUserExerciseByDetails(
-    username,
-    exerciseName,
-    date
-  );
-
-  return await prisma.userExercise.update({
-    where: {
-      id: userExercise.id,
-    },
-    data: {
-      duration: newDuration,
-    },
-  });
 }
 
 export async function getUserExercisesForDate(username: string, date: string) {

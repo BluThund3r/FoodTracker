@@ -4,6 +4,7 @@ import { UserNotFound } from "../exceptions/UserNotFound";
 import { getUserByUsername, getUserDetailsByUsername } from "./userService";
 import { getMealsForDay } from "./mealService";
 import { convert } from "./unitService";
+import { getUserExercisesForDate } from "./exerciseService";
 
 const activityMapping = {
   SEDENTARY: 1.2,
@@ -106,8 +107,12 @@ export async function getUserNutritionRemainingForDay(
 ) {
   const idealNutrition = await getUserIdealNutrition(username);
   const nutritionForDay = await getUserNutritionForDay(username, date);
+  const userExerciseForDay = await getUserExercisesForDate(username, date);
   return {
-    calories: idealNutrition.calories - nutritionForDay.calories,
+    calories:
+      idealNutrition.calories -
+      nutritionForDay.calories +
+      userExerciseForDay.totalCaloriesBurned,
     protein: idealNutrition.macros.protein - nutritionForDay.protein,
     carbs: idealNutrition.macros.carbs - nutritionForDay.carbs,
     fat: idealNutrition.macros.fat - nutritionForDay.fat,
