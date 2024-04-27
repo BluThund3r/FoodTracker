@@ -28,6 +28,7 @@ nutritionRouter.get("/idealNutrition", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// TODO: update for the exercise
 nutritionRouter.get(
   "/remainingNutrition",
   isLoggedIn,

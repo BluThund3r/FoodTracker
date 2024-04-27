@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  id           String       @id @default(uuid())
-  isAdmin      Boolean      @default(false)
-  username     String       @unique
+  id           String         @id @default(uuid())
+  isAdmin      Boolean        @default(false)
+  username     String         @unique
   passwordHash String
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   userDetails  UserDetails?
   meals        Meal[]
+  userExercise UserExercise[]
 }
 
 model UserDetails {
@@ -82,7 +83,7 @@ model ServingUnit {
   food         Food[]
   fromUnit     UnitConversion[] @relation("fromUnit")
   toUnit       UnitConversion[] @relation("toUnit")
-  mealItems     MealItem[]
+  mealItems    MealItem[]
 }
 
 model UnitConversion {
@@ -125,4 +126,26 @@ enum MealType {
   LUNCH
   DINNER
   SNACKS
+}
+
+model Exercise {
+  id                String         @id @default(uuid())
+  name              String         @unique
+  description       String?
+  caloriesPerMinute Float
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  userExercises     UserExercise[]
+}
+
+model UserExercise {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  date       String
+  duration   Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  exerciseId String
+
+  @@unique([userId, date, exerciseId])
 }
