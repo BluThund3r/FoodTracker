@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/extension";
 import { UserNotFound } from "../exceptions/UserNotFound";
 import { getUserByUsername, getUserDetailsByUsername } from "./userService";
 import { getMealsForDay } from "./mealService";
+import { convert } from "./unitService";
 
 const activityMapping = {
   SEDENTARY: 1.2,
@@ -111,5 +112,41 @@ export async function getUserNutritionRemainingForDay(
     carbs: idealNutrition.macros.carbs - nutritionForDay.carbs,
     fat: idealNutrition.macros.fat - nutritionForDay.fat,
     sugar: idealNutrition.macros.sugar - nutritionForDay.sugar,
+  };
+}
+
+export async function calcNutritionForMeal(meal) {
+  let result = {
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    sugar: 0,
+  };
+
+  for (const item of meal.items) {
+    const { calories, protein, fat, carbs, sugar } = await calcNutritionForItem(
+      item
+    );
+    result.calories += calories;
+    result.protein += protein;
+    result.carbs += carbs;
+    result.fat += fat;
+    result.sugar += sugar;
+  }
+
+  return result;
+}
+
+export async function calcNutritionForItem(item) {
+  const ratio =
+    (await convert(item.unit.id, item.food.baseServingUnit.id, item.amount)) /
+    item.food.baseServingSize;
+  return {
+    calories: item.food.calories * ratio,
+    protein: item.food.protein * ratio,
+    carbs: item.food.carbs * ratio,
+    fat: item.food.fat * ratio,
+    sugar: item.food.sugar * ratio,
   };
 }

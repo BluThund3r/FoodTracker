@@ -1,6 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { isSortCriteria, isSortOrder } from "../types/foodTypes";
 import { isActivityLevel, isGender, isPlan } from "../services/userService";
+import { InvalidDateFormat } from "../exceptions/InvalidDateFormat";
+import { InvalidDate } from "../exceptions/InvalidDate";
+import { isMealName } from "../services/mealService";
 
 // Useful functions
 function validateStrictPositiveNumber(number) {
@@ -13,6 +16,19 @@ function validatePositiveNumber(number) {
 
 function undefOrNull(value) {
   return value === undefined || value === null;
+}
+
+function isDateWithValidFormat(date) {
+  const minimumYear = 2000;
+  const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
+  if (!dateRegex.test(date)) throw new InvalidDateFormat();
+
+  const parsedDate = new Date(date);
+  if (!isNaN(parsedDate.getTime())) throw new InvalidDate();
+
+  if (parsedDate.getFullYear() < minimumYear) throw new InvalidDate();
+
+  return true;
 }
 
 // Unit validations
@@ -152,6 +168,84 @@ export function validateUserDetails(req, res, next) {
   if (!isActivityLevel(activityLevel)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid activity level",
+    });
+  }
+
+  next();
+}
+
+export function validateDateQuery(req, res, next) {
+  const date = req.query.date as string;
+  if (!date) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide a date",
+    });
+  }
+
+  if (isDateWithValidFormat(date)) {
+    // if not, an error is thrown
+    next();
+  }
+}
+
+export function validateMealCreate(req, res, next) {
+  const { name, date } = req.body;
+  if (!name || !date) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide all fields",
+    });
+  }
+
+  if (!isMealName(name)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid meal name",
+    });
+  }
+
+  if (isDateWithValidFormat(date)) {
+    // if not, an error is thrown
+    next();
+  }
+}
+
+export function validateAddFood(req, res, next) {
+  const { mealId, foodId, amount, unitId } = req.body;
+  if (!mealId || !foodId || undefOrNull(amount) || !unitId) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide all fields",
+    });
+  }
+
+  if (!validateStrictPositiveNumber(amount)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid amount",
+    });
+  }
+
+  next();
+}
+
+export function validateMealItemId(req, res, next) {
+  const mealItemId = req.params.mealItemId;
+  if (!mealItemId) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Please provide a meal item id",
+    });
+  }
+
+  next();
+}
+
+export function validateUpdateMealItem(req, res, next) {
+  const { amount, unitAbbrev } = req.body;
+  if (!undefOrNull(amount) && !validateStrictPositiveNumber(amount)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid amount",
+    });
+  }
+  if (!unitAbbrev) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid unit id",
     });
   }
 
