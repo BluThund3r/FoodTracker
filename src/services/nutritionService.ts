@@ -1,7 +1,5 @@
 import { UserDetails } from "@prisma/client";
-import { PrismaClient } from "@prisma/client/extension";
-import { UserNotFound } from "../exceptions/UserNotFound";
-import { getUserByUsername, getUserDetailsByUsername } from "./userService";
+import { getUserDetailsByUsername } from "./userService";
 import { getMealsForDay } from "./mealService";
 import { convert } from "./unitService";
 import { getUserExercisesForDate } from "./exerciseService";

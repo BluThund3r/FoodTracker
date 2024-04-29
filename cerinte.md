@@ -16,21 +16,21 @@
 
 ## Optional (pana la 10)
 
-- [ ] Cel putin 4 unit tests (**1 punct**) 🟢
+- [ ] Cel putin 4 unit tests (**1 punct**)
 - [ ] Operatii CRUD mai avansate, de ales dintre (**maxim 2 puncte**):
   - [x] Filtrare + Sortare (**1 punct**) 🟢
   - [x] Paginare (**1 punct**) 🟢
   - [ ] Tranzactie unde se insereaza / updateaza mai multe entitati interdependente (**1 punct**)
-- [x] Implementarea si folosirea unor custom middlewares (**0.5 puncte per middleware, maxim 1 punct**)
+- [x] Implementarea si folosirea unor custom middlewares (**0.5 puncte per middleware, maxim 1 punct**) 🟢
   - Implementarea și folosirea implica sa faceți voi unul de la 0, nu sa folositi middlewares gata făcute din alte librării
 - [x] Autentificare avansata (**1 punct**) la alegere:
   - [x] Role based authentication 🟢
   - [ ] Integrare cu OAuth
 - [ ] Documentatie (**1 punct**) 🟢
-  - [ ] README complet, descrierea aplicației, pașii de setup explicarea env variables
-  - [ ] Diagrama bazei de date
+  - [x] README complet, descrierea aplicației, pașii de setup, explicarea env variables
+  - [x] Diagrama bazei de date
   - [ ] Documentarea API-ului (e.g. puteti folosi Swagger)
-- [ ] Flow Chart Diagram (**0.5 puncte**) - diagrama care sa arate principalele flow-uri prin care API-ul va fi folosit de catre un client
+- [x] Flow Chart Diagram (**0.5 puncte**) - diagrama care sa arate principalele flow-uri prin care API-ul va fi folosit de catre un client
 - [ ] Image upload (**1 punct**)
   - Multipart/Form-Data sau binary data
   - Salvarea unei referințe a imaginii în baza de date

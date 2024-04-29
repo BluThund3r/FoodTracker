@@ -1,5 +1,6 @@
 import { PrismaClient, UserDetails } from "@prisma/client";
 import { UserNotFound } from "../exceptions/UserNotFound";
+import { UserDetailsNotAdded } from "../exceptions/UserDetailsNotAdded";
 const prisma = new PrismaClient();
 
 export function isPlan(plan: string) {
@@ -61,9 +62,11 @@ export async function getUserByUsername(username: string) {
 export async function getUserDetailsByUsername(username: string) {
   const user = await getUserByUsername(username);
   if (!user) throw new UserNotFound();
-  return await prisma.userDetails.findUnique({
+  const details = await prisma.userDetails.findUnique({
     where: {
       userId: user.id,
     },
   });
+  if (!details) throw new UserDetailsNotAdded();
+  return details;
 }
