@@ -33,3 +33,11 @@ Once the database is running, simply run the command `npm run start` to run the 
 ## Database Diagram
 
 ![alt text](./diagrams/FoodTrackerDB.jpg)
+
+## Demo Usage Flow
+
+A user can access a few functionalities, such as searching for food and exercises, even **without** registering and logging in.
+
+For access to the entire set of functionalities one must register into the application first, and then log in. After that, they can add details about themselves (_weight_, _height_, _age_, _gender_, _activity level_ and _weight plan_). Moreover, a user can get, only after adding **all** user details, their calculated BMR, TDEE and ideal nutritional values (_calories_, _protein_, _fat_, _carbs_, _sugar_) for them.They can also create meals (_breakfast_, _lunch_, _dinner_, _snacks_) for a particular date and add food items for those meals with specified quantity and serving unit. Exercises can be logged for any day with a specified duration. If they have previously added details about themselves and they have logged meals and even exercises for a particular day, they can get the consumed and remaining nutritional values for that specific day (e.g. if the ideal number of calories is 2000, they consumed a total of 1000 for the meals in that day and burned 700 calories during exercise in that day, the remaining number of calories is 2000 - 1000 + 700 = 1700).
+
+The application integrates functionalities for admins as well. After loggin in, an admin can _create_ / _update_ / _delete_ **food**, **exercises**, **units** and **unit conversion rates**.

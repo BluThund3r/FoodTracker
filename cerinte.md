@@ -9,7 +9,7 @@
   - Implicit trebuie o metoda de signup și signin pentru a face rost de un JWT
 - [x] Error handling
 - [x] Middleware care valideaza payload/parametrii request-ului
-- [ ] Explicați unul sau mai multe flow-uri prin care un potential client (e.g. o aplicatie web)
+- [x] Explicați unul sau mai multe flow-uri prin care un potential client (e.g. o aplicatie web)
       ar trece pentru a folosi aplicația
   - E.g: Aplicatie de retete: Userul se inregistreaza în aplicație, după care poate
     vedea rețetele altor utilizatori, poate sa voteze și să lase comentarii.
